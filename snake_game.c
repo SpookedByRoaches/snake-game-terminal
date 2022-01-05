@@ -185,7 +185,7 @@ int is_head_colliding(struct snake_segment *player)
 	if ((player_next_x >= COLS - 1) || (player_next_x <= 0))
 		return 1;
 	player_next_y = snake_next_y_position(player);
-	if ((player_next_y >= LINES) || (player_next_y < INFO_LINES))
+	if ((player_next_y >= LINES - 1) || (player_next_y <= INFO_LINES))
 		return 1;
 	list_for_each(i, &player->list){
 		cur_segment = list_entry(i, struct snake_segment, list);
@@ -408,10 +408,10 @@ void snake_place_food(struct snake_segment *player, struct food *mouse)
 	struct snake_segment *cur_segment;
 	is_ok = 0;
 	while (!is_ok){
-		x = random()%(COLS - 2) + 1;
+		x = random()%(COLS - 3) + 1;
 		if (x % 2 == 0)
 			x--;
-		y = (random()%(LINES - INFO_LINES) + INFO_LINES);
+		y = (random()%(LINES - (INFO_LINES + 2)) + INFO_LINES + 1);
 		is_ok = 1;
 		if (player->x == x && player->y == y){
 			is_ok= 0;
