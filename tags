@@ -1,0 +1,151 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/bo3lwa/scripts/cool-shit/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210905.0/
+ALERT_COLOR_PAIR	cool-shit.h	/^#define ALERT_COLOR_PAIR /;"	d
+COLOR_BRIGHT_RED	cool-shit.h	/^#define COLOR_BRIGHT_RED /;"	d
+COLOR_BRIGHT_YELLOW	cool-shit.h	/^#define COLOR_BRIGHT_YELLOW /;"	d
+COLOR_DARK_GREEN	cool-shit.h	/^#define COLOR_DARK_GREEN /;"	d
+COOL_SHIT_H	cool-shit.h	/^#define COOL_SHIT_H$/;"	d
+DEBUG_LINE	cool-shit.h	/^#define DEBUG_LINE /;"	d
+FOOD_COLOR_PAIR	cool-shit.h	/^#define FOOD_COLOR_PAIR /;"	d
+HLIST_HEAD	list.h	/^#define HLIST_HEAD(/;"	d
+HLIST_HEAD_INIT	list.h	/^#define HLIST_HEAD_INIT /;"	d
+INFO_LINES	cool-shit.h	/^#define INFO_LINES /;"	d
+INIT_HLIST_HEAD	list.h	/^#define INIT_HLIST_HEAD(/;"	d
+INIT_HLIST_NODE	list.h	/^static inline void INIT_HLIST_NODE(struct hlist_node *h)$/;"	f	typeref:typename:void
+INIT_LIST_HEAD	list.h	/^static inline void INIT_LIST_HEAD(struct list_head *list)$/;"	f	typeref:typename:void
+LIST_HEAD	list.h	/^#define LIST_HEAD(/;"	d
+LIST_HEAD_INIT	list.h	/^#define LIST_HEAD_INIT(/;"	d
+LIST_POISON1	list.h	/^#define LIST_POISON1 /;"	d
+LIST_POISON2	list.h	/^#define LIST_POISON2 /;"	d
+SNAKE_COLOR_PAIR	cool-shit.h	/^#define SNAKE_COLOR_PAIR /;"	d
+TICK_PERIOD_MS	cool-shit.h	/^#define TICK_PERIOD_MS /;"	d
+TICK_PERIOD_US	cool-shit.h	/^#define TICK_PERIOD_US /;"	d
+_LINUX_LIST_H	list.h	/^#define _LINUX_LIST_H$/;"	d
+__hlist_del	list.h	/^static inline void __hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
+__list_add	list.h	/^static inline void __list_add(struct list_head *new,$/;"	f	typeref:typename:void
+__list_cut_position	list.h	/^static inline void __list_cut_position(struct list_head *list,$/;"	f	typeref:typename:void
+__list_del	list.h	/^static inline void __list_del(struct list_head * prev, struct list_head * next)$/;"	f	typeref:typename:void
+__list_del_entry	list.h	/^static inline void __list_del_entry(struct list_head *entry)$/;"	f	typeref:typename:void
+__list_for_each	list.h	/^#define __list_for_each(/;"	d
+__list_splice	list.h	/^static inline void __list_splice(const struct list_head *list,$/;"	f	typeref:typename:void
+block	cool-shit.h	/^#define block /;"	d
+clear_game_screen	cool-shit.c	/^void clear_game_screen()$/;"	f	typeref:typename:void
+container_of	list.h	/^#define container_of(/;"	d
+cool-shit	makefile	/^cool-shit:$/;"	t
+diamond	cool-shit.h	/^#define diamond /;"	d
+direction	cool-shit.h	/^enum direction {up, right, down, left};$/;"	g
+down	cool-shit.h	/^enum direction {up, right, down, left};$/;"	e	enum:direction
+first	list.h	/^	struct hlist_node *first;$/;"	m	struct:hlist_head	typeref:struct:hlist_node *
+food	cool-shit.h	/^struct food {$/;"	s
+heading	cool-shit.h	/^	enum direction heading;$/;"	m	struct:snake_segment	typeref:enum:direction
+hlist_add_after	list.h	/^static inline void hlist_add_after(struct hlist_node *n,$/;"	f	typeref:typename:void
+hlist_add_before	list.h	/^static inline void hlist_add_before(struct hlist_node *n,$/;"	f	typeref:typename:void
+hlist_add_fake	list.h	/^static inline void hlist_add_fake(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_add_head	list.h	/^static inline void hlist_add_head(struct hlist_node *n, struct hlist_head *h)$/;"	f	typeref:typename:void
+hlist_del	list.h	/^static inline void hlist_del(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_del_init	list.h	/^static inline void hlist_del_init(struct hlist_node *n)$/;"	f	typeref:typename:void
+hlist_empty	list.h	/^static inline int hlist_empty(const struct hlist_head *h)$/;"	f	typeref:typename:int
+hlist_entry	list.h	/^#define hlist_entry(/;"	d
+hlist_for_each	list.h	/^#define hlist_for_each(/;"	d
+hlist_for_each_entry	list.h	/^#define hlist_for_each_entry(/;"	d
+hlist_for_each_entry_continue	list.h	/^#define hlist_for_each_entry_continue(/;"	d
+hlist_for_each_entry_from	list.h	/^#define hlist_for_each_entry_from(/;"	d
+hlist_for_each_entry_safe	list.h	/^#define hlist_for_each_entry_safe(/;"	d
+hlist_for_each_safe	list.h	/^#define hlist_for_each_safe(/;"	d
+hlist_head	list.h	/^struct hlist_head {$/;"	s
+hlist_move_list	list.h	/^static inline void hlist_move_list(struct hlist_head *old,$/;"	f	typeref:typename:void
+hlist_node	list.h	/^struct hlist_node {$/;"	s
+hlist_unhashed	list.h	/^static inline int hlist_unhashed(const struct hlist_node *h)$/;"	f	typeref:typename:int
+is_head_colliding	cool-shit.c	/^int is_head_colliding(struct snake_segment *player)$/;"	f	typeref:typename:int
+kill_everything	cool-shit.c	/^void kill_everything(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+left	cool-shit.h	/^enum direction {up, right, down, left};$/;"	e	enum:direction
+list	cool-shit.h	/^	struct list_head list;$/;"	m	struct:snake_segment	typeref:struct:list_head
+list_add	list.h	/^static inline void list_add(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
+list_add_tail	list.h	/^static inline void list_add_tail(struct list_head *new, struct list_head *head)$/;"	f	typeref:typename:void
+list_cut_position	list.h	/^static inline void list_cut_position(struct list_head *list,$/;"	f	typeref:typename:void
+list_del	list.h	/^static inline void list_del(struct list_head *entry)$/;"	f	typeref:typename:void
+list_del_init	list.h	/^static inline void list_del_init(struct list_head *entry)$/;"	f	typeref:typename:void
+list_empty	list.h	/^static inline int list_empty(const struct list_head *head)$/;"	f	typeref:typename:int
+list_empty_careful	list.h	/^static inline int list_empty_careful(const struct list_head *head)$/;"	f	typeref:typename:int
+list_entry	list.h	/^#define list_entry(/;"	d
+list_first_entry	list.h	/^#define list_first_entry(/;"	d
+list_for_each	list.h	/^#define list_for_each(/;"	d
+list_for_each_entry	list.h	/^#define list_for_each_entry(/;"	d
+list_for_each_entry_continue	list.h	/^#define list_for_each_entry_continue(/;"	d
+list_for_each_entry_continue_reverse	list.h	/^#define list_for_each_entry_continue_reverse(/;"	d
+list_for_each_entry_from	list.h	/^#define list_for_each_entry_from(/;"	d
+list_for_each_entry_reverse	list.h	/^#define list_for_each_entry_reverse(/;"	d
+list_for_each_entry_safe	list.h	/^#define list_for_each_entry_safe(/;"	d
+list_for_each_entry_safe_continue	list.h	/^#define list_for_each_entry_safe_continue(/;"	d
+list_for_each_entry_safe_from	list.h	/^#define list_for_each_entry_safe_from(/;"	d
+list_for_each_entry_safe_reverse	list.h	/^#define list_for_each_entry_safe_reverse(/;"	d
+list_for_each_prev	list.h	/^#define list_for_each_prev(/;"	d
+list_for_each_prev_safe	list.h	/^#define list_for_each_prev_safe(/;"	d
+list_for_each_safe	list.h	/^#define list_for_each_safe(/;"	d
+list_head	list.h	/^struct list_head {$/;"	s
+list_is_last	list.h	/^static inline int list_is_last(const struct list_head *list,$/;"	f	typeref:typename:int
+list_is_singular	list.h	/^static inline int list_is_singular(const struct list_head *head)$/;"	f	typeref:typename:int
+list_move	list.h	/^static inline void list_move(struct list_head *list, struct list_head *head)$/;"	f	typeref:typename:void
+list_move_tail	list.h	/^static inline void list_move_tail(struct list_head *list,$/;"	f	typeref:typename:void
+list_prepare_entry	list.h	/^#define list_prepare_entry(/;"	d
+list_replace	list.h	/^static inline void list_replace(struct list_head *old,$/;"	f	typeref:typename:void
+list_replace_init	list.h	/^static inline void list_replace_init(struct list_head *old,$/;"	f	typeref:typename:void
+list_rotate_left	list.h	/^static inline void list_rotate_left(struct list_head *head)$/;"	f	typeref:typename:void
+list_safe_reset_next	list.h	/^#define list_safe_reset_next(/;"	d
+list_splice	list.h	/^static inline void list_splice(const struct list_head *list,$/;"	f	typeref:typename:void
+list_splice_init	list.h	/^static inline void list_splice_init(struct list_head *list,$/;"	f	typeref:typename:void
+list_splice_tail	list.h	/^static inline void list_splice_tail(struct list_head *list,$/;"	f	typeref:typename:void
+list_splice_tail_init	list.h	/^static inline void list_splice_tail_init(struct list_head *list,$/;"	f	typeref:typename:void
+main	cool-shit.c	/^int main()$/;"	f	typeref:typename:int
+main_thread_routine	cool-shit.c	/^void *main_thread_routine(void *)$/;"	f	typeref:typename:void *
+next	list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node *
+next	list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *
+offsetof	list.h	/^#define offsetof(/;"	d
+pprev	list.h	/^	struct hlist_node *next, **pprev;$/;"	m	struct:hlist_node	typeref:struct:hlist_node **
+prev	list.h	/^	struct list_head *next, *prev;$/;"	m	struct:list_head	typeref:struct:list_head *
+right	cool-shit.h	/^enum direction {up, right, down, left};$/;"	e	enum:direction
+screen_lock	cool-shit.c	/^pthread_mutex_t *screen_lock;$/;"	v	typeref:typename:pthread_mutex_t *
+semi_filled_block	cool-shit.h	/^#define semi_filled_block /;"	d
+snake_alert_collision	cool-shit.c	/^void snake_alert_collision(int is_colliding)$/;"	f	typeref:typename:void
+snake_change_direction	cool-shit.c	/^void snake_change_direction(struct snake_segment *player, int input)$/;"	f	typeref:typename:void
+snake_construct	cool-shit.c	/^void snake_construct(struct snake_segment *player, int x, int y, enum direction heading)$/;"	f	typeref:typename:void
+snake_draw	cool-shit.c	/^void snake_draw(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+snake_draw_food	cool-shit.c	/^void snake_draw_food(struct food *mouse)$/;"	f	typeref:typename:void
+snake_draw_head	cool-shit.c	/^void snake_draw_head(struct snake_segment *player)$/;"	f	typeref:typename:void
+snake_draw_segment	cool-shit.c	/^void snake_draw_segment(struct snake_segment *segment)$/;"	f	typeref:typename:void
+snake_grow_and_replace_food	cool-shit.c	/^void snake_grow_and_replace_food(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+snake_handle_input	cool-shit.c	/^void snake_handle_input(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+snake_initialize_game	cool-shit.c	/^void snake_initialize_game()$/;"	f	typeref:typename:void
+snake_input_is_acceptable	cool-shit.c	/^int snake_input_is_acceptable(int input)$/;"	f	typeref:typename:int
+snake_move_body	cool-shit.c	/^void snake_move_body(struct snake_segment *player)$/;"	f	typeref:typename:void
+snake_move_head	cool-shit.c	/^void snake_move_head(struct snake_segment *player)$/;"	f	typeref:typename:void
+snake_move_segment	cool-shit.c	/^void snake_move_segment(struct snake_segment *segment)$/;"	f	typeref:typename:void
+snake_next_x_position	cool-shit.c	/^short snake_next_x_position(struct snake_segment *segment)$/;"	f	typeref:typename:short
+snake_next_y_position	cool-shit.c	/^short snake_next_y_position(struct snake_segment *segment)$/;"	f	typeref:typename:short
+snake_place_food	cool-shit.c	/^void snake_place_food(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+snake_previous_x_position	cool-shit.c	/^short snake_previous_x_position(struct snake_segment *segment)$/;"	f	typeref:typename:short
+snake_previous_y_position	cool-shit.c	/^short snake_previous_y_position(struct snake_segment *segment)$/;"	f	typeref:typename:short
+snake_restore_terminal_settings	cool-shit.c	/^void snake_restore_terminal_settings()$/;"	f	typeref:typename:void
+snake_segment	cool-shit.h	/^struct snake_segment {$/;"	s
+snake_set_up_terminal_settings	cool-shit.c	/^void snake_set_up_terminal_settings()$/;"	f	typeref:typename:void
+snake_tick	cool-shit.c	/^void snake_tick(struct snake_segment *player, struct food *mouse)$/;"	f	typeref:typename:void
+throw_error	cool-shit.c	/^void throw_error(const char *message)$/;"	f	typeref:typename:void
+timer_thread_routine	cool-shit.c	/^void *timer_thread_routine(void *)$/;"	f	typeref:typename:void *
+triangle_down	cool-shit.h	/^#define triangle_down /;"	d
+triangle_left	cool-shit.h	/^#define triangle_left /;"	d
+triangle_right	cool-shit.h	/^#define triangle_right /;"	d
+triangle_up	cool-shit.h	/^#define triangle_up /;"	d
+up	cool-shit.h	/^enum direction {up, right, down, left};$/;"	e	enum:direction
+x	cool-shit.h	/^	short x;$/;"	m	struct:food	typeref:typename:short
+x	cool-shit.h	/^	short x;$/;"	m	struct:snake_segment	typeref:typename:short
+y	cool-shit.h	/^	short y;$/;"	m	struct:food	typeref:typename:short
+y	cool-shit.h	/^	short y;$/;"	m	struct:snake_segment	typeref:typename:short
