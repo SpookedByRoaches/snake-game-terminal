@@ -9,12 +9,20 @@
 #include "list.h"
 #include "snake_game.h"
 
+
 pthread_mutex_t *screen_lock;
+pthread_mutex_t *input_flag_lock;
+int received_input;
+
 
 int main()
 {
 	screen_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	input_flag_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	pthread_t main_thread, timer_thread;
+	if (pthread_mutex_init(screen_lock, NULL) != 0)
+		throw_error("Cannot create pthread_mutex\n");
+	
 	if (pthread_mutex_init(screen_lock, NULL) != 0)
 		throw_error("Cannot create pthread_mutex\n");
 	pthread_create(&main_thread, NULL, main_thread_routine, (void *) NULL);
@@ -28,6 +36,16 @@ void throw_error(const char *message)
 {
 	fprintf(stderr, message);
 	exit(EXIT_FAILURE);
+}
+
+int snake_get_size(struct snake_segment *player)
+{
+	struct list_head *i;
+	int score = 0;
+	list_for_each(i, &player->list){
+		score++;
+	}
+	return score;
 }
 
 void draw_frame()
@@ -53,6 +71,36 @@ void draw_frame()
 
 void *timer_thread_routine(void *)
 {
+	int t_div = 30;
+	char erase[t_div + 1];
+	struct timeval t_before, t_after;
+	long int usec_before, usec_after, usec_diff;
+	memset(erase, ' ', t_div);
+	erase[t_div] = '\0';
+	while(1){
+		for (int i = 0; i < t_div; i++){
+			gettimeofday(&t_before, NULL);
+			usec_before = t_before.tv_sec*1000000 + t_before.tv_usec;
+			if (received_input)
+				break;
+			pthread_mutex_lock(screen_lock);
+			move(1, i);
+			printw("X");
+			refresh();
+			pthread_mutex_unlock(screen_lock);
+			gettimeofday(&t_after, NULL);
+			usec_after = t_after.tv_sec*1000000 + t_after.tv_usec;
+			usec_diff = usec_after - usec_before;
+			usleep(TICK_PERIOD_US/t_div - usec_diff);
+		}
+		pthread_mutex_lock(input_flag_lock);
+		received_input = 0;
+		pthread_mutex_unlock(input_flag_lock);
+		pthread_mutex_lock(screen_lock);
+		move(1, 0);
+		printw("%s", erase);
+		pthread_mutex_unlock(screen_lock);
+	}
 	return NULL;
 }
 
@@ -178,7 +226,6 @@ void snake_move_segment(struct snake_segment *segment)
 
 int is_head_colliding(struct snake_segment *player)
 {
-	struct list_head *i;
 	short player_next_x, player_next_y, cur_segment_next_x, cur_segment_next_y;
 	struct snake_segment *cur_segment;
 	player_next_x = snake_next_x_position(player);
@@ -187,8 +234,7 @@ int is_head_colliding(struct snake_segment *player)
 	player_next_y = snake_next_y_position(player);
 	if ((player_next_y >= LINES - 1) || (player_next_y <= INFO_LINES))
 		return 1;
-	list_for_each(i, &player->list){
-		cur_segment = list_entry(i, struct snake_segment, list);
+	list_for_each_entry(cur_segment, &player->list, list){
 		cur_segment_next_x = snake_next_x_position(cur_segment);
 		cur_segment_next_y = snake_next_y_position(cur_segment);
 		if ((cur_segment_next_x == player_next_x) && (cur_segment_next_y == player_next_y))
@@ -270,11 +316,19 @@ void snake_draw(struct snake_segment *player, struct food *mouse)
 	}
 	snake_draw_food(mouse);
 	attroff(COLOR_PAIR(SNAKE_COLOR_PAIR));
+	snake_draw_info(player, mouse);
 	gettimeofday(&after, NULL);
 	refresh();
 	pthread_mutex_unlock(screen_lock);
 }
 
+void snake_draw_info(struct snake_segment *player, struct food *mouse)
+{
+	int cur_score = snake_get_size(player);
+
+	move(0, COLS/2);
+	printw("%d/%d", cur_score, (COLS/2 - 1)*(LINES - 4));
+}
 
 void snake_draw_head(struct snake_segment *player)
 {
@@ -333,7 +387,7 @@ void snake_set_up_terminal_settings()
 	init_pair(SNAKE_COLOR_PAIR, COLOR_DARK_GREEN, COLOR_BLACK);
 	init_pair(ALERT_COLOR_PAIR, COLOR_BLACK, COLOR_BRIGHT_YELLOW);
 	init_pair(FOOD_COLOR_PAIR, COLOR_BRIGHT_RED, COLOR_BLACK);
-	init_pair(FRAME_COLOR_PAIR, COLOR_BLACK, COLOR_WHITE);
+	init_pair(FRAME_COLOR_PAIR, COLOR_BLACK, COLOR_BEIGE);
 	clear();
 }
 void snake_restore_terminal_settings()
@@ -353,11 +407,24 @@ void snake_handle_input(struct snake_segment *player, struct food *mouse)
 	if ((input == KEY_UP) || (input == KEY_DOWN) || (input == KEY_RIGHT) || (input == KEY_LEFT)) 
 		snake_change_direction(player, input);
 	
+	if ((input == 'p') || (input == 'P'))
+		snake_pause_game();
+	pthread_mutex_lock(screen_lock);
+	received_input = 1;
+	pthread_mutex_unlock(screen_lock);
+
+}
+
+void snake_pause_game()
+{
+	int input = getch();
+	while((input != 'p') && (input != 'P'))
+		input = getch();
 }
 
 int snake_input_is_acceptable(int input)
 {
-	int acceptable_inputs[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, 'q', 'Q'};
+	int acceptable_inputs[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, 'q', 'Q', 'p', 'P'};
 	int numel = sizeof(acceptable_inputs)/sizeof(int);
 	for (int i = 0; i < numel; i++)
 		if (input == acceptable_inputs[i])
@@ -425,12 +492,6 @@ void snake_place_food(struct snake_segment *player, struct food *mouse)
 			}
 		}
 	}
-	pthread_mutex_lock(screen_lock);
-	if (y >= 15){
-		move(DEBUG_LINE, 0);
-		printw("mouse->y == %d", y);
-	}
-	pthread_mutex_unlock(screen_lock);
 	mouse->x = x;
 	mouse->y = y;
 }

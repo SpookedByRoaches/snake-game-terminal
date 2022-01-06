@@ -20,6 +20,7 @@
 #define COLOR_BRIGHT_RED 196
 #define COLOR_BRIGHT_YELLOW 226
 #define COLOR_WHITE 255
+#define COLOR_BEIGE 7
 
 
 enum direction {up, right, down, left};
@@ -67,4 +68,7 @@ void *main_thread_routine();
 void throw_error(const char *message);
 int snake_input_is_acceptable(int input);
 void snake_alert_collision(int is_colliding);
+int snake_get_size(struct snake_segment *player);
+void snake_draw_info(struct snake_segment *player, struct food *mouse);
+void snake_pause_game();
 #endif
