@@ -21,6 +21,7 @@
 #define COLOR_BRIGHT_YELLOW 226
 #define COLOR_WHITE 255
 #define COLOR_BEIGE 7
+#define T_DIV 30
 
 
 enum direction {up, right, down, left};
@@ -71,4 +72,6 @@ void snake_alert_collision(int is_colliding);
 int snake_get_size(struct snake_segment *player);
 void snake_draw_info(struct snake_segment *player, struct food *mouse);
 void snake_pause_game();
+void timer_draw_time(int cur_time);
+void timer_erase_time();
 #endif
