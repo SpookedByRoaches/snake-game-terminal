@@ -16,12 +16,16 @@
 #define FOOD_COLOR_PAIR 2
 #define ALERT_COLOR_PAIR 3
 #define FRAME_COLOR_PAIR 4
+#define INVERSE_COLOR_PAIR 5
 #define COLOR_DARK_GREEN 34
 #define COLOR_BRIGHT_RED 196
 #define COLOR_BRIGHT_YELLOW 226
-#define COLOR_WHITE 255
 #define COLOR_BEIGE 7
 #define T_DIV 30
+#define LOWER_X_LIMIT 1
+#define HIGHER_X_LIMIT COLS - 2
+#define LOWER_Y_LIMIT INFO_LINES + 1
+#define HIGHER_Y_LIMIT LINES - 3
 
 
 enum direction {up, right, down, left};
@@ -60,8 +64,9 @@ void snake_move_segment(struct snake_segment *segment);
 void snake_draw_head(struct snake_segment *player);
 void snake_draw_segment(struct snake_segment *segment);
 void snake_place_food(struct snake_segment *player, struct food *mouse);
-void snake_grow_and_replace_food(struct snake_segment *player, struct food *mouse);
+void snake_grow(struct snake_segment *player, struct snake_segment *tail_copy);
 void snake_draw_food(struct food *mouse);
+void snake_copy_tail(struct snake_segment *player, struct snake_segment *copy);
 void snake_initialize_game();
 void snake_game_loop();
 void *timer_thread_routine();
@@ -72,6 +77,8 @@ void snake_alert_collision(int is_colliding);
 int snake_get_size(struct snake_segment *player);
 void snake_draw_info(struct snake_segment *player, struct food *mouse);
 void snake_pause_game();
+void draw_pause_menu(enum menu_commands selected);
 void timer_draw_time(int cur_time);
 void timer_erase_time();
+void timer_pause_time();
 #endif

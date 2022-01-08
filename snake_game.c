@@ -15,7 +15,13 @@ pthread_mutex_t pause_lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t input_flag_lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t pause_cond = PTHREAD_COND_INITIALIZER;
 int received_input, is_paused;
+char *pause_menu_options[] = {
+	"Resume",
+	"Quit",
+	NULL
+};
 
+enum menu_commands {Resume, Quit}; 
 
 int main()
 {
@@ -77,7 +83,7 @@ void *timer_thread_routine(void *)
 		for (int i = 0; i < T_DIV; i++){
 			gettimeofday(&t_before, NULL);
 			usec_before = t_before.tv_sec*1000000 + t_before.tv_usec;
-			if (received_input)
+			if (received_input || is_paused)
 				break;
 			timer_draw_time(i);
 			gettimeofday(&t_after, NULL);
@@ -86,10 +92,18 @@ void *timer_thread_routine(void *)
 			usleep(TICK_PERIOD_US/T_DIV - usec_diff);
 		}
 		timer_erase_time();
+		if (is_paused)
+			timer_pause_time();
 	}
 	return NULL;
 }
 
+void timer_pause_time()
+{
+	pthread_mutex_lock(&pause_lock);
+	pthread_cond_wait(&pause_cond, &pause_lock);
+	pthread_mutex_unlock(&pause_lock);
+}
 
 void timer_erase_time()
 {
@@ -117,6 +131,7 @@ void timer_draw_time(int cur_time)
 void *main_thread_routine(void *)
 {
 	snake_initialize_game();
+	return NULL;
 }
 
 void snake_initialize_game()
@@ -135,14 +150,6 @@ void snake_initialize_game()
 	if ((init_x % 2) == 0)
 		init_x--;
 	snake_construct(player, init_x, init_y, up);
-	pthread_mutex_lock(&screen_lock);
-	if (has_colors() == 0){
-		printw("NO COLORS");
-	} else {
-		printw("HAS COLORS");
-	}
-	refresh();
-	pthread_mutex_unlock(&screen_lock);
 	draw_frame();
 	snake_place_food(player, mouse);
 	for (;;){
@@ -163,16 +170,19 @@ void snake_construct(struct snake_segment *player, int x, int y, enum direction 
 
 void snake_tick(struct snake_segment *player, struct food *mouse)
 {
+	static struct snake_segment temp_tail = {x: 0, y: 0, heading: up};
 	snake_handle_input(player, mouse);
 	if (is_head_colliding(player)){
 		snake_alert_collision(1);
 		return;
 	}
 	snake_alert_collision(0);
+	snake_copy_tail(player, &temp_tail);	
 	snake_move_head(player);
 	snake_move_body(player);
 	if ((player->x == mouse->x) && (player->y == mouse->y)){
-		snake_grow_and_replace_food(player, mouse);
+		snake_grow(player, &temp_tail);
+		snake_place_food(player, mouse);
 	}
 }
 
@@ -194,6 +204,18 @@ void snake_alert_collision(int is_colliding)
 	pthread_mutex_unlock(&screen_lock);
 }
 
+void snake_copy_tail(struct snake_segment *player, struct snake_segment *copy)
+{
+	struct snake_segment *tail;
+	if (&player->list == player->list.prev)
+		tail = player;
+	else
+		tail = list_last_entry(&player->list, struct snake_segment, list);
+	copy->x = tail->x;
+	copy->y = tail->y;
+	copy->heading = tail->heading;
+}
+
 void snake_move_head(struct snake_segment *player)
 {
 	short nextx = snake_next_x_position(player);
@@ -202,16 +224,14 @@ void snake_move_head(struct snake_segment *player)
 	player->y = nexty;
 }
 
-void snake_grow_and_replace_food(struct snake_segment *player, struct food *mouse)
+void snake_grow(struct snake_segment *player, struct snake_segment *tail_copy)
 {
-	struct snake_segment *new_segment, *tail_end_segment;
+	struct snake_segment *new_segment;
 	new_segment = (struct snake_segment *)malloc(sizeof(struct snake_segment));
-	tail_end_segment = list_entry(player->list.prev, struct snake_segment, list);
-	new_segment->x = snake_previous_x_position(tail_end_segment);
-	new_segment->y = snake_previous_y_position(tail_end_segment);
-	new_segment->heading = tail_end_segment->heading;
+	new_segment->x = tail_copy->x;
+	new_segment->y = tail_copy->y;
+	new_segment->heading = tail_copy->heading;
 	list_add_tail(&new_segment->list, &player->list);
-	snake_place_food(player, mouse);
 }
 
 void snake_move_body(struct snake_segment *player)
@@ -398,6 +418,7 @@ void snake_set_up_terminal_settings()
 	init_pair(ALERT_COLOR_PAIR, COLOR_BLACK, COLOR_BRIGHT_YELLOW);
 	init_pair(FOOD_COLOR_PAIR, COLOR_BRIGHT_RED, COLOR_BLACK);
 	init_pair(FRAME_COLOR_PAIR, COLOR_BLACK, COLOR_BEIGE);
+	init_pair(INVERSE_COLOR_PAIR, COLOR_BLACK, COLOR_BEIGE);
 	clear();
 }
 void snake_restore_terminal_settings()
@@ -419,19 +440,69 @@ void snake_handle_input(struct snake_segment *player, struct food *mouse)
 	
 	if ((input == 'p') || (input == 'P'))
 		snake_pause_game();
-	pthread_mutex_lock(&screen_lock);
+	pthread_mutex_lock(&input_flag_lock);
 	received_input = 1;
-	pthread_mutex_unlock(&screen_lock);
+	pthread_mutex_unlock(&input_flag_lock);
 
 }
+
+void draw_pause_menu(enum menu_commands selected)
+{
+	pthread_mutex_lock(&screen_lock);
+	clear_game_screen();
+	short x, y, num_options, option_len;
+	for (num_options = 0; pause_menu_options[num_options] != NULL; num_options++);
+	
+	num_options++;
+	y = LINES/2 - num_options/2;
+	
+	for (int i = 0; pause_menu_options[i] != NULL; i++){
+		if (i == selected)
+			attron(COLOR_PAIR(INVERSE_COLOR_PAIR));
+
+		option_len = strlen(pause_menu_options[i]);
+		x = COLS/2 - option_len/2;
+		move(y, x);
+		printw("%s", pause_menu_options[i]);
+		y++;
+		if (i == selected)
+			attroff(COLOR_PAIR(INVERSE_COLOR_PAIR));
+
+	}
+	refresh();
+	pthread_mutex_unlock(&screen_lock);
+}
+
 
 void snake_pause_game()
 {
 	is_paused = 1;
-	int input = getch();
-	while((input != 'p') && (input != 'P'))
+	int input, num_options;
+	static enum menu_commands selected = 0;
+	for (num_options = 0; pause_menu_options[num_options] != NULL; num_options++);
+	num_options--;
+	draw_pause_menu(0);
+	input = getch();
+	while(1){
 		input = getch();
-	is_paused = 0;
+		if ((input == 'p') || (input =='P')){
+			is_paused = 0;
+			pthread_cond_signal(&pause_cond);
+			return;
+		}
+		if (input == KEY_UP && selected > 0){
+			selected--;
+			draw_pause_menu(selected);
+		}
+		if (input == KEY_DOWN && selected < num_options){
+			selected++;
+			draw_pause_menu(selected);
+		}
+			
+	}
+
+	
+
 }
 
 int snake_input_is_acceptable(int input)
@@ -489,10 +560,10 @@ void snake_place_food(struct snake_segment *player, struct food *mouse)
 	struct snake_segment *cur_segment;
 	is_ok = 0;
 	while (!is_ok){
-		x = random()%(COLS - 3) + 1;
+		x = random()%(HIGHER_X_LIMIT - LOWER_X_LIMIT) + LOWER_X_LIMIT;
 		if (x % 2 == 0)
 			x--;
-		y = (random()%(LINES - (INFO_LINES + 2)) + INFO_LINES + 1);
+		y = (random()%(HIGHER_Y_LIMIT - LOWER_Y_LIMIT) + LOWER_Y_LIMIT);
 		is_ok = 1;
 		if (player->x == x && player->y == y){
 			is_ok= 0;
