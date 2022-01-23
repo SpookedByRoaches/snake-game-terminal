@@ -21,8 +21,6 @@ char *pause_menu_options[] = {
 	NULL
 };
 
-enum menu_commands {Resume, Quit}; 
-
 int main()
 {
 	pthread_t main_thread, timer_thread;
@@ -439,7 +437,7 @@ void snake_handle_input(struct snake_segment *player, struct food *mouse)
 		snake_change_direction(player, input);
 	
 	if ((input == 'p') || (input == 'P'))
-		snake_pause_game();
+		snake_pause_game(player, mouse);
 	pthread_mutex_lock(&input_flag_lock);
 	received_input = 1;
 	pthread_mutex_unlock(&input_flag_lock);
@@ -474,7 +472,7 @@ void draw_pause_menu(enum menu_commands selected)
 }
 
 
-void snake_pause_game()
+void snake_pause_game(struct snake_segment *player, struct food *mouse)
 {
 	is_paused = 1;
 	int input, num_options;
@@ -486,23 +484,27 @@ void snake_pause_game()
 	while(1){
 		input = getch();
 		if ((input == 'p') || (input =='P')){
-			is_paused = 0;
-			pthread_cond_signal(&pause_cond);
-			return;
-		}
-		if (input == KEY_UP && selected > 0){
+			goto unpause;
+		} else if (input == KEY_UP && selected > 0){
 			selected--;
 			draw_pause_menu(selected);
-		}
-		if (input == KEY_DOWN && selected < num_options){
+		} else if (input == KEY_DOWN && selected < num_options){
 			selected++;
 			draw_pause_menu(selected);
+		} else if (input == '\n'){
+			switch (selected){
+			case Resume:
+				goto unpause;
+				break;
+			case Quit:
+				kill_everything(player, mouse);
+			}
 		}
-			
 	}
-
-	
-
+unpause:
+	is_paused = 0;
+	pthread_cond_signal(&pause_cond);
+	return;
 }
 
 int snake_input_is_acceptable(int input)

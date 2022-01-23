@@ -29,7 +29,7 @@
 
 
 enum direction {up, right, down, left};
-
+enum menu_commands {Resume, Quit}; 
 
 struct snake_segment {
 	struct list_head list;
@@ -76,7 +76,7 @@ int snake_input_is_acceptable(int input);
 void snake_alert_collision(int is_colliding);
 int snake_get_size(struct snake_segment *player);
 void snake_draw_info(struct snake_segment *player, struct food *mouse);
-void snake_pause_game();
+void snake_pause_game(struct snake_segment *player, struct food *mouse);
 void draw_pause_menu(enum menu_commands selected);
 void timer_draw_time(int cur_time);
 void timer_erase_time();
